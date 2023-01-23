@@ -1,0 +1,25 @@
+@import "../../styles/constants";
+
+.not-found-page {
+  width: 100vw;
+  height: 100vh;
+  @include center;
+
+  &__center {
+    &__title {
+      color: red;
+      margin-bottom: 2rem;
+    }
+
+    &__back-to-main {
+      border-radius: 5px;
+      padding: 0.5rem;
+      color: $color-grey-2;
+      text-decoration: underline;
+
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+}

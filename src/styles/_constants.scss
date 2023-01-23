@@ -1,0 +1,8 @@
+$color-grey-1: #ecf0f3;
+$color-grey-2: #505050;
+
+// MIXINS
+@mixin center {
+  display: grid;
+  place-items: center;
+}

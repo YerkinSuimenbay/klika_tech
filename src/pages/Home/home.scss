@@ -1,0 +1,16 @@
+@import "../../styles/constants";
+
+.home {
+  width: 100vw;
+  height: 100vh;
+  @include center;
+
+  &__center {
+    @include center;
+    row-gap: 2rem;
+
+    &__title {
+      font-size: 3rem;
+    }
+  }
+}
