@@ -1,0 +1,53 @@
+@import "../../../styles/constants";
+
+table,
+th,
+td {
+  border: 1px solid rgb(0, 0, 0);
+  border-collapse: collapse;
+}
+
+.table {
+  width: 100%;
+}
+
+thead {
+  background-color: $color-grey-2;
+  color: #fff;
+  //   height: 60px;
+}
+
+th,
+td {
+  padding: 10px;
+}
+
+th {
+}
+
+td {
+  //   height: 40px;
+  text-align: left;
+}
+
+.table-header-cell {
+  cursor: pointer;
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__arrows {
+      display: flex;
+      //   flex-direction: column;
+
+      svg {
+        cursor: pointer;
+
+        // &:hover {
+        //     fill: rgb(24, 172, 122);
+        // }
+      }
+    }
+  }
+}

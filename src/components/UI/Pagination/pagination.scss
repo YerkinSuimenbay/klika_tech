@@ -1,0 +1,40 @@
+@import "../../../styles/constants";
+
+@mixin pagination-button {
+  background-color: $color-blue-1;
+  color: rgba(38, 38, 38, 0.75);
+  border-radius: 5px;
+  padding: 1rem;
+  &:hover {
+    background-color: $color-blue-2;
+  }
+
+  &.active {
+    background-color: #fff;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__buttons {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+  }
+
+  &__button {
+    @include pagination-button;
+  }
+}
+
+.items-per-page-selector {
+  display: flex;
+  column-gap: 5px;
+
+  button {
+    @include pagination-button;
+  }
+}

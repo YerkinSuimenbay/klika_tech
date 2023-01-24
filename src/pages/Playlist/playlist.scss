@@ -1,0 +1,39 @@
+@import "../../styles/constants";
+
+$gap: 10px;
+
+.playlist-page {
+  &__content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+
+    .playlist-table {
+      flex: 1;
+      display: grid;
+      row-gap: $gap;
+
+      &__title {
+        text-align: center;
+      }
+    }
+
+    .filter {
+      display: grid;
+      row-gap: $gap;
+
+      &__title {
+        text-align: center;
+      }
+
+      &__form {
+        background-color: $color-blue-1;
+        padding: 10px;
+        display: grid;
+        gap: 10px;
+        border: 1px solid #e5e5e5;
+      }
+    }
+  }
+}

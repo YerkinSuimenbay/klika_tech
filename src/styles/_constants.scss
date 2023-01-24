@@ -1,5 +1,10 @@
+$max-width: 1200px;
+$width: 90%;
+
 $color-grey-1: #ecf0f3;
 $color-grey-2: #505050;
+$color-blue-1: rgba(0, 10, 32, 0.05);
+$color-blue-2: rgba(0, 10, 32, 0.1);
 
 // MIXINS
 @mixin center {

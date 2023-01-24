@@ -1,0 +1,65 @@
+$border-radius: 5px;
+
+.select-field {
+  min-width: 200px;
+  position: relative;
+
+  &__label {
+    margin-bottom: 2px;
+  }
+
+  &__selected-option {
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    padding: 5px;
+    border-radius: $border-radius;
+    border: 1px solid;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &__options {
+    z-index: 10;
+    position: absolute;
+    top: calc(5px + #{100%});
+    background-color: #fff;
+    width: 100%;
+    max-height: 300px;
+    overflow: auto;
+    border-radius: $border-radius;
+    border: 1px solid;
+
+    .search-option {
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1.2em;
+      background-color: #bddded;
+
+      outline: none;
+      border: none;
+      border-radius: $border-radius;
+
+      &:focus {
+        border: 1px solid;
+      }
+    }
+
+    .no-option {
+      padding: 0.8rem;
+      color: red;
+    }
+
+    .option {
+      padding: 0.5rem;
+      cursor: pointer;
+
+      &:hover {
+        background-color: gray;
+        color: #fff;
+        // background-color: rgb(207, 206, 206);
+      }
+    }
+  }
+}
