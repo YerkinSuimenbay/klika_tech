@@ -14,7 +14,6 @@ td {
 thead {
   background-color: $color-grey-2;
   color: #fff;
-  //   height: 60px;
 }
 
 th,
@@ -22,11 +21,7 @@ td {
   padding: 10px;
 }
 
-th {
-}
-
 td {
-  //   height: 40px;
   text-align: left;
 }
 
@@ -42,7 +37,15 @@ td {
       //   flex-direction: column;
 
       svg {
+        $sort-arrow-size: 30px;
         cursor: pointer;
+        height: $sort-arrow-size;
+        width: $sort-arrow-size;
+        color: #919cb1;
+
+        &.circle {
+          color: #63ccff;
+        }
 
         // &:hover {
         //     fill: rgb(24, 172, 122);

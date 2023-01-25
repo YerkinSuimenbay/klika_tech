@@ -1,13 +1,21 @@
 import { FC } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { ItemsPerPageSelector } from "./ItemsPerPageSelector";
+import {
+  OnRowsPerPageChangeFunction,
+  RowsPerPageSelector,
+} from "./RowsPerPageSelector";
 
 import "./pagination.scss";
 import { PaginationButton } from "./PaginationButton";
+import { RowsPerPage } from "../../../utils/enums";
 
 interface IProps {
   pageCount: number;
   onPageChange: (newPage: number) => void;
+  prevPage: VoidFunction;
+  nextPage: VoidFunction;
+  onRowsPerPageChange: OnRowsPerPageChangeFunction;
+  rowsPerPage: RowsPerPage;
   currentPage?: number;
   pageRangeDisplayed?: number; // around current page
   marginPagesDisplayed?: number; // from two ends
@@ -19,6 +27,10 @@ interface IProps {
 export const Pagination: FC<IProps> = ({
   pageCount,
   onPageChange,
+  prevPage,
+  nextPage,
+  onRowsPerPageChange,
+  rowsPerPage,
   currentPage = 1,
   pageRangeDisplayed = 4,
   marginPagesDisplayed = 2,
@@ -48,7 +60,7 @@ export const Pagination: FC<IProps> = ({
         <PaginationButton
           key={i}
           label={i}
-          onClick={onPageChange}
+          onClick={() => onPageChange(i)}
           className={currentPage === i ? "active" : ""}
         />
       );
@@ -60,17 +72,22 @@ export const Pagination: FC<IProps> = ({
 
   return (
     <div className="pagination">
-      <ItemsPerPageSelector />
+      <RowsPerPageSelector
+        onChange={onRowsPerPageChange}
+        rowsPerPage={rowsPerPage}
+      />
 
       <div className="pagination__buttons">
         <PaginationButton
           label={<IoIosArrowBack size={20} />}
           className="prev"
+          onClick={prevPage}
         />
         {renderButtons()}
         <PaginationButton
           label={<IoIosArrowForward size={20} />}
           className="forward"
+          onClick={nextPage}
         />
       </div>
     </div>

@@ -23,6 +23,9 @@ $gap: 10px;
       display: grid;
       row-gap: $gap;
 
+      position: sticky;
+      top: 20px;
+
       &__title {
         text-align: center;
       }

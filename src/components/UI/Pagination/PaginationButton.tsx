@@ -3,7 +3,7 @@ import { FC } from "react";
 interface IProps {
   label: number | string | JSX.Element;
   className?: string;
-  onClick?: (pageNumber: number) => void;
+  onClick?: VoidFunction;
 }
 
 export const PaginationButton: FC<IProps> = ({
@@ -19,7 +19,7 @@ export const PaginationButton: FC<IProps> = ({
   }
 
   const handleClick = () => {
-    onClick && typeof label === "number" && onClick(label);
+    onClick && onClick();
   };
 
   return (

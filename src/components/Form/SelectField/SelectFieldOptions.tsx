@@ -1,45 +1,59 @@
 import React, { FC, useState } from "react";
-
-export interface IOption {
-  id: number;
-  value: string;
-}
+import { ISelectFieldOption } from "../../../utils/interfaces";
 
 interface IProps {
   show: boolean;
-  options: IOption[];
-  onClick: (option: IOption) => void;
-  //   searchOptions: (value: string) => void;
+  options: ISelectFieldOption[];
+  onClick: (option: ISelectFieldOption) => void;
+  isLoading: boolean;
+  error: string;
+  onSearchChange: (search: string) => void;
+  selectedOption: ISelectFieldOption;
 }
 
-export const SelectFieldOptions: FC<IProps> = ({ show, options, onClick }) => {
-  const [search, setSearch] = useState("");
-
-  const filterOptions = (options: IOption[]): IOption[] => {
-    return options.filter((option) =>
-      option.value.toLowerCase().includes(search.toLowerCase().trim())
-    );
-  };
-
+export const SelectFieldOptions: FC<IProps> = ({
+  show,
+  options,
+  onClick,
+  isLoading,
+  error,
+  onSearchChange,
+  selectedOption,
+}) => {
   const renderOptions = () => {
-    const filteredOptions = filterOptions(options);
-    if (!filteredOptions.length)
-      return <li className="no-option">No option</li>;
+    if (isLoading) {
+      return <li className="option loading">Loading...</li>;
+    }
 
-    return filteredOptions.map((option) => (
-      <li
-        key={option.id}
-        className="option"
-        onClick={() => {
-          onClick(option);
-        }}
-      >
-        {option.value}
-      </li>
-    ));
+    if (!options.length) return <li className="no-option">No option</li>;
+
+    return options.map((option) => {
+      let className = "option";
+      if (option.id === selectedOption.id) {
+        className += " active";
+      }
+      return (
+        <li
+          key={option.id}
+          className={className}
+          onClick={() => {
+            onClick(option);
+          }}
+        >
+          {option.name}
+        </li>
+      );
+    });
   };
 
   if (!show) return null;
+  if (error) {
+    return (
+      <ul className="select-field__options">
+        <li className="option error">{error}</li>
+      </ul>
+    );
+  }
 
   return (
     <ul className="select-field__options">
@@ -47,9 +61,8 @@ export const SelectFieldOptions: FC<IProps> = ({ show, options, onClick }) => {
         className="search-option"
         type="text"
         placeholder="Search..."
-        value={search}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setSearch(event.target.value);
+          onSearchChange(event.target.value);
         }}
       />
       {renderOptions()}

@@ -1,24 +1,26 @@
 import { TableHeader } from "./TableHeader";
 import { TableRow } from "./TableRow";
 import "./table.scss";
+import { IColumn, TableSort } from "../../../utils/interfaces";
+import { TableSortFunction } from "../../../utils/types";
 
-export interface IColumn<T> {
-  key: string;
-  title: string;
-  width?: number;
-  render?: (column: IColumn<T>, item: T) => void;
-}
-
-interface IProps<T> {
+interface IProps<T, V> {
   rows: T[];
   columns: IColumn<T>[];
+  sort: TableSort<V>;
+  onSort: TableSortFunction<V>;
 }
 
-export function Table<T>({ rows, columns }: IProps<T>): JSX.Element {
+export function Table<T, V>({
+  rows,
+  columns,
+  sort,
+  onSort,
+}: IProps<T, V>): JSX.Element {
   return (
     <table className="table">
       <thead>
-        <TableHeader columns={columns} />
+        <TableHeader columns={columns} sort={sort} onSort={onSort} />
       </thead>
       <tbody>
         <TableRow rows={rows} columns={columns} />

@@ -66,12 +66,12 @@ h5 {
   background: $color-grey-1;
   max-width: $max-width;
   width: $width;
-  margin: 0 auto;
+  margin: 3rem auto;
 
   &__title {
     // font-size: 2em;
     font-weight: 600;
-    margin: 1em 0;
+    margin-bottom: 1em;
     text-align: center;
   }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { IColumn } from "./Table";
+import { IColumn } from "../../../utils/interfaces";
 
 interface IProps<T> {
   rows: T[];
@@ -12,7 +12,7 @@ export function TableRow<T>({ rows, columns }: IProps<T>): JSX.Element {
       {rows.map((row, ind) => (
         <tr key={ind}>
           {columns.map((column, colInd) => (
-            <TableRowCell key={column.key} column={column} row={row} />
+            <TableRowCell key={column.field} column={column} row={row} />
           ))}
         </tr>
       ))}
@@ -28,8 +28,8 @@ interface IPropsCell<T> {
 
 export function TableRowCell<T>({ row, column }: IPropsCell<T>) {
   let cellValue: string = "";
-  if (row instanceof Object && row.hasOwnProperty(column.key)) {
-    cellValue = (row as any)[column.key];
+  if (row instanceof Object && row.hasOwnProperty(column.field)) {
+    cellValue = (row as any)[column.field];
   }
 
   return <td>{cellValue}</td>;

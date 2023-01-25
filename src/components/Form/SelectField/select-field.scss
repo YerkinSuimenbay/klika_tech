@@ -39,7 +39,7 @@ $border-radius: 5px;
 
       outline: none;
       border: none;
-      border-radius: $border-radius;
+      // border-radius: $border-radius;
 
       &:focus {
         border: 1px solid;
@@ -52,13 +52,32 @@ $border-radius: 5px;
     }
 
     .option {
-      padding: 0.5rem;
+      padding: 1rem 0.5rem;
       cursor: pointer;
 
       &:hover {
-        background-color: gray;
         color: #fff;
-        // background-color: rgb(207, 206, 206);
+        background-color: #5f9fd5;
+      }
+
+      &.active {
+        background-color: #505050;
+        color: #fff;
+      }
+
+      &.loading {
+        background-color: rgb(7, 182, 7);
+        color: #fff;
+        text-align: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+      &.error {
+        background-color: #f53f3f;
+        color: #fff;
+        text-align: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
       }
     }
   }
