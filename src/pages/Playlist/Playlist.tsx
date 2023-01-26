@@ -30,10 +30,9 @@ import { isSelectFieldOptionWithId } from "../../utils/functions";
 import { ResetButton } from "../../components/Buttons";
 import {
   createSearchParams,
+  Link,
   URLSearchParamsInit,
-  useLocation,
   useNavigate,
-  useSearchParams,
 } from "react-router-dom";
 
 const columns: IColumn<IPlaylistTableRow>[] = [
@@ -310,6 +309,10 @@ const Playlist: FC = () => {
               disabled={Object.values(filter).every((field) => !field.name)}
             />
           </form>
+
+          <Link to={"/"} className="playlist-page__back-to-main">
+            Back to main
+          </Link>
         </div>
       </div>
     </div>

@@ -3,6 +3,16 @@
 $gap: 10px;
 
 .playlist-page {
+  &__back-to-main {
+    text-align: center;
+    margin-top: 2rem;
+    text-decoration: underline;
+
+    &:hover {
+      color: $color-blue-4;
+    }
+  }
+
   &__content {
     display: flex;
     align-items: flex-start;
