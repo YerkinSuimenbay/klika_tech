@@ -6,6 +6,7 @@
   @include center;
 
   &__center {
+    @include center;
     &__title {
       color: red;
       margin-bottom: 2rem;
