@@ -20,6 +20,22 @@ export function TableRow<T>({ rows, columns }: IProps<T>): JSX.Element {
   );
 }
 
+export function NoTableRow({
+  colSpan,
+  label = "NO DATA",
+}: {
+  colSpan: number;
+  label: string;
+}): JSX.Element {
+  return (
+    <tr>
+      <td colSpan={colSpan} style={{ textAlign: "center" }}>
+        {label}
+      </td>
+    </tr>
+  );
+}
+
 // TABLE ROW CELL
 interface IPropsCell<T> {
   row: T;

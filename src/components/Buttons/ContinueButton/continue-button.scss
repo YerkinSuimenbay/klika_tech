@@ -1,8 +1,10 @@
+@import "../../../styles/constants";
+
 .continue-btn {
   background-color: #04aa6d;
   color: white;
   font-size: 2rem;
-  border-radius: 5px;
+  border-radius: $border-radius;
   transition: all 0.2s linear;
 
   &:hover {

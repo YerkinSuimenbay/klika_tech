@@ -1,4 +1,4 @@
-$border-radius: 5px;
+@import "../../../styles/constants";
 
 .select-field {
   min-width: 200px;
@@ -39,7 +39,6 @@ $border-radius: 5px;
 
       outline: none;
       border: none;
-      // border-radius: $border-radius;
 
       &:focus {
         border: 1px solid;

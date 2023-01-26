@@ -1,29 +1,42 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
+
 import "./playlist.scss";
-import { Pagination, Table } from "../../components/UI";
+import { ErrorComponent, Loader, Pagination, Table } from "../../components/UI";
 import {
   SelectField,
   SelectFieldFetchOptionsFunction,
 } from "../../components/Form";
 import { BASE_URL } from "../../utils/constants";
-import { Order, PlaylistTableField, RowsPerPage } from "../../utils/enums";
+import {
+  Order,
+  PlaylistFilterEndpoint,
+  PlaylistTableField,
+  RowsPerPage,
+} from "../../utils/enums";
 import { OnRowsPerPageChangeFunction } from "../../components/UI/Pagination/RowsPerPageSelector";
-import { IColumn, ISelectFieldOption, TableSort } from "../../utils/interfaces";
+import {
+  IColumn,
+  IPlaylistTableRow,
+  ISelectFieldOption,
+  TableSort,
+} from "../../utils/interfaces";
 import {
   SelectFieldChangeFunction,
   TableSortFunction,
+  TSelectFieldOption,
 } from "../../utils/types";
-import { sign } from "crypto";
+import { isSelectFieldOptionWithId } from "../../utils/functions";
+import { ResetButton } from "../../components/Buttons";
+import {
+  createSearchParams,
+  URLSearchParamsInit,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 
-interface IRow {
-  singer: string;
-  song: string;
-  genre: string;
-  year: number;
-}
-
-const columns: IColumn<IRow>[] = [
+const columns: IColumn<IPlaylistTableRow>[] = [
   {
     field: PlaylistTableField.singer,
     title: "Singer",
@@ -46,22 +59,20 @@ const columns: IColumn<IRow>[] = [
   },
 ];
 
-export type FilterList = "singers" | "genres";
-
 const Playlist: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
 
   // FILTER
-  const [filter, setFilter] = useState<Record<string, ISelectFieldOption>>({
-    singer: { id: -1, name: "All" },
-    genre: { id: -1, name: "All" },
-    year: { id: -1, name: "All" },
+  const [filter, setFilter] = useState<Record<string, TSelectFieldOption>>({
+    singer: { id: -1, name: "" },
+    genre: { id: -1, name: "" },
+    year: { name: "" },
   });
 
-  const fetchList: SelectFieldFetchOptionsFunction<FilterList> = async (
-    endpoint: FilterList,
-    search?: string
-  ) => {
+  const fetchList: SelectFieldFetchOptionsFunction<
+    PlaylistFilterEndpoint
+  > = async (endpoint: PlaylistFilterEndpoint, search?: string) => {
     let url = `${BASE_URL}/api/${endpoint}`;
 
     let sign: "?" | "&" = "?";
@@ -71,24 +82,35 @@ const Playlist: FC = () => {
       sign = "&";
     }
 
-    if (filter.singer.id > 0) {
+    if (
+      isSelectFieldOptionWithId(filter.singer) &&
+      filter.singer.id > 0 &&
+      endpoint !== PlaylistFilterEndpoint.singers
+    ) {
       url += `${sign}singer=${filter.singer.id}`;
       sign = "&";
     }
 
-    if (filter.year.id > 0) {
-      url += `${sign}year=${filter.year.id}`;
+    if (
+      isSelectFieldOptionWithId(filter.genre) &&
+      filter.genre.id > 0 &&
+      endpoint !== PlaylistFilterEndpoint.genres
+    ) {
+      url += `${sign}genre=${filter.genre.id}`;
+      sign = "&";
+    }
+
+    if (filter.year.name && endpoint !== PlaylistFilterEndpoint.years) {
+      url += `${sign}year=${filter.year.name}`;
     }
 
     try {
       const res = await axios.get(url);
       const { list } = res.data;
 
-      console.log({ list });
       return [list, null];
     } catch (error) {
-      if (error instanceof AxiosError || error instanceof Error) {
-        console.log("ERROR: ", error.message);
+      if (error instanceof Error) {
         return [[], error.message];
       }
 
@@ -106,51 +128,62 @@ const Playlist: FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [itemsOffset, setItemsOffset] = useState(0);
-  const [playlist, setPlaylist] = useState<IRow[]>([]);
+  const [playlist, setPlaylist] = useState<IPlaylistTableRow[]>([]);
   const [total, setTotal] = useState(0);
-
+  const navigate = useNavigate();
   // FETCH PLAYLIST
+
   const fetchPlaylist = useCallback(async () => {
     setIsLoading(true);
 
-    let url = `${BASE_URL}/api/playlist?limit=${rowsPerPage}&offset=${itemsOffset}`;
+    const url = `${BASE_URL}/api/playlist`;
+
+    const query: URLSearchParamsInit = {
+      limit: String(rowsPerPage),
+      offset: String(itemsOffset),
+    };
 
     if (sort.order !== Order.none) {
-      url += `&sort=${sort.field}&order=${sort.order}`;
+      query["sort"] = sort.field;
+      query["order"] = sort.order;
     }
 
-    let filterQuery = "";
     Object.entries(filter).forEach(([field, value]) => {
-      console.log(field);
-      if (value.id !== -1) {
-        filterQuery += `&${field}=${value.id}`;
+      if (value.name !== "") {
+        const queryValue = isSelectFieldOptionWithId(value)
+          ? value.id
+          : value.name;
+        query[field] = String(queryValue);
       }
     });
-    url += filterQuery;
 
     try {
-      const response = await axios.get(url);
-      if (response.status !== 200) {
-        console.log("ERROR");
-        throw new Error(response.data);
-      }
+      const search = createSearchParams(query).toString();
+      const response = await axios.get(url + `?${search}`);
 
       const { data } = response;
-      console.log({ data });
 
       setPlaylist(data.playlist);
       setTotal(data.total);
 
-      const pageCount = Math.ceil(data.total / rowsPerPage); // 100 / 10 = 10
+      const pageCount = Math.ceil(data.total / rowsPerPage);
       setPageCount(pageCount);
+
+      const options = {
+        search,
+      };
+
+      navigate(options, { replace: true });
     } catch (error) {
-      if (error instanceof AxiosError) {
-        console.log("ERROR: ", error.message);
+      if (error instanceof Error) {
+        setError(error.message);
       }
+
+      setError("Something went wrong!");
     } finally {
       setIsLoading(false);
     }
-  }, [rowsPerPage, itemsOffset, sort, filter]);
+  }, [rowsPerPage, itemsOffset, sort, filter, navigate]);
 
   useEffect(() => {
     fetchPlaylist();
@@ -187,9 +220,6 @@ const Playlist: FC = () => {
   function updateOffset(page: number, rowsPerPage: RowsPerPage) {
     const newOffset = ((page - 1) * rowsPerPage) % total;
     setItemsOffset(newOffset);
-    console.log(
-      `Page number: ${page}, Limit: ${rowsPerPage}, Offset ${newOffset}`
-    );
   }
 
   // SORT
@@ -204,39 +234,36 @@ const Playlist: FC = () => {
     field: string,
     selectedOption: ISelectFieldOption
   ) => {
-    console.log(selectedOption);
+    handlePageClick(1);
     setFilter((prev) => ({ ...prev, [field]: selectedOption }));
+  };
+  const resetFilter = () => {
+    setFilter({
+      singer: { id: -1, name: "" },
+      genre: { id: -1, name: "" },
+      year: { name: "" },
+    });
   };
 
   // LOADING
-  if (isLoading)
-    return (
-      <div
-        style={{
-          width: "100vw",
-          height: "100vh",
-          fontSize: "3em",
-          fontWeight: 600,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        Loading...
-      </div>
-    );
+  if (isLoading) return <Loader />;
+
+  if (error) {
+    return <ErrorComponent message={error} />;
+  }
 
   return (
     <div className="page playlist-page">
       <h1 className="page__title">Playlist Page</h1>
       <div className="playlist-page__content">
         <div className="playlist-table">
-          <h3 className="playlist-table__title">Playlist</h3>
-          <Table<IRow, PlaylistTableField>
+          <Table<IPlaylistTableRow, PlaylistTableField>
+            total={total}
             rows={playlist}
             columns={columns}
             sort={sort}
             onSort={handleSort}
+            refetchTable={fetchPlaylist}
           />
           <Pagination
             pageCount={pageCount}
@@ -253,13 +280,13 @@ const Playlist: FC = () => {
           <h3 className="filter__title">Filter</h3>
 
           <form className="filter__form">
-            <SelectField<FilterList>
+            <SelectField<PlaylistFilterEndpoint>
               field="singer"
               label="Singer"
               onChange={handleFilterChange}
               value={filter["singer"]}
               fetchOptions={fetchList}
-              endpoint="singers"
+              endpoint={PlaylistFilterEndpoint.singers}
             />
             <SelectField
               field="genre"
@@ -267,7 +294,7 @@ const Playlist: FC = () => {
               onChange={handleFilterChange}
               value={filter["genre"]}
               fetchOptions={fetchList}
-              endpoint="genres"
+              endpoint={PlaylistFilterEndpoint.genres}
             />
             <SelectField
               field="year"
@@ -275,7 +302,12 @@ const Playlist: FC = () => {
               onChange={handleFilterChange}
               value={filter["year"]}
               fetchOptions={fetchList}
-              endpoint="singers"
+              endpoint={PlaylistFilterEndpoint.years}
+            />
+            <ResetButton
+              onClick={resetFilter}
+              type="button"
+              disabled={Object.values(filter).every((field) => !field.name)}
             />
           </form>
         </div>

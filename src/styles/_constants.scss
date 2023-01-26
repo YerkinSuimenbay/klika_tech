@@ -5,6 +5,18 @@ $color-grey-1: #ecf0f3;
 $color-grey-2: #505050;
 $color-blue-1: rgba(0, 10, 32, 0.05);
 $color-blue-2: rgba(0, 10, 32, 0.1);
+$color-blue-3: #919cb1;
+$color-blue-4: #757e8f;
+$color-blue-5: #599dc3;
+
+$filter-blue-3: brightness(0) saturate(100%) invert(55%) sepia(2%)
+  saturate(2265%) hue-rotate(186deg) brightness(112%) contrast(92%);
+$filter-blue-4: brightness(0) saturate(100%) invert(56%) sepia(8%)
+  saturate(727%) hue-rotate(181deg) brightness(86%) contrast(88%);
+$filter-blue-5: brightness(0) saturate(100%) invert(53%) sepia(66%)
+  saturate(300%) hue-rotate(157deg) brightness(94%) contrast(94%);
+
+$border-radius: 5px;
 
 // MIXINS
 @mixin center {

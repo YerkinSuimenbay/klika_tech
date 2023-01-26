@@ -52,6 +52,11 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &:disabled {
+    cursor: default;
+    background-color: inherit;
+  }
 }
 
 h1,

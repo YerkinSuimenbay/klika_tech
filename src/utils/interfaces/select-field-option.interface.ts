@@ -1,4 +1,6 @@
 export interface ISelectFieldOption {
-    id: number;
-    name: string;
-  }
+  name: string;
+}
+export interface ISelectFieldOptionWithId extends ISelectFieldOption {
+  id: number;
+}

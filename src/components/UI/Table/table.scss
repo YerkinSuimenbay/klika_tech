@@ -1,5 +1,24 @@
 @import "../../../styles/constants";
 
+.table-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__title {
+    display: flex;
+    gap: 5px;
+  }
+  .refetch-table-btn {
+    cursor: pointer;
+    filter: $filter-blue-3;
+
+    &:hover {
+      filter: $filter-blue-4;
+    }
+  }
+}
+
 table,
 th,
 td {
@@ -34,22 +53,21 @@ td {
 
     &__arrows {
       display: flex;
-      //   flex-direction: column;
 
       svg {
         $sort-arrow-size: 30px;
         cursor: pointer;
         height: $sort-arrow-size;
         width: $sort-arrow-size;
-        color: #919cb1;
+        color: $color-blue-3;
+
+        &:hover {
+          color: $color-blue-4;
+        }
 
         &.circle {
           color: #63ccff;
         }
-
-        // &:hover {
-        //     fill: rgb(24, 172, 122);
-        // }
       }
     }
   }

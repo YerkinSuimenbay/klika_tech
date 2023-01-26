@@ -16,12 +16,9 @@ interface IProps {
   nextPage: VoidFunction;
   onRowsPerPageChange: OnRowsPerPageChangeFunction;
   rowsPerPage: RowsPerPage;
-  currentPage?: number;
-  pageRangeDisplayed?: number; // around current page
+  currentPage: number;
   marginPagesDisplayed?: number; // from two ends
   breakLabel?: string;
-  nextLabel?: string;
-  previousLabel?: string;
 }
 
 export const Pagination: FC<IProps> = ({
@@ -32,11 +29,9 @@ export const Pagination: FC<IProps> = ({
   onRowsPerPageChange,
   rowsPerPage,
   currentPage = 1,
-  pageRangeDisplayed = 4,
-  marginPagesDisplayed = 2,
+  marginPagesDisplayed = 1,
   breakLabel = "...",
-  nextLabel = "next >",
-  previousLabel = "< previous",
+  
 }) => {
   const renderButtons = () => {
     const buttons: JSX.Element[] = [];
@@ -44,7 +39,7 @@ export const Pagination: FC<IProps> = ({
     const rightEdge = pageCount - marginPagesDisplayed + 1;
     const leftEdge = marginPagesDisplayed;
     const rangeStart = currentPage - 1;
-    const rangeEnd = currentPage + 2;
+    const rangeEnd = currentPage + 1;
 
     for (let i = 1; i <= pageCount; i++) {
       if (i > leftEdge && i < rangeStart) {

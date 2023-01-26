@@ -1,0 +1,13 @@
+@import "../../../styles/constants";
+
+.reset-btn {
+  display: flex;
+  gap: 5px;
+  border: 1px solid #c0c0c0;
+  border-radius: $border-radius;
+  transition: all 0.1s linear;
+
+  &:hover {
+    background-color: $color-blue-1;
+  }
+}

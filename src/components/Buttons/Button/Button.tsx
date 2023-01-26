@@ -2,9 +2,11 @@ import { FC } from "react";
 import "./button.scss";
 
 interface IProps {
-  label: string;
+  label: string | JSX.Element;
   onClick: VoidFunction;
   className?: string;
+  // All other props
+  [x: string]: any;
 }
 
 export const Button: FC<IProps> = ({

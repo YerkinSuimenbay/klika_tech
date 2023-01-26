@@ -1,14 +1,14 @@
-import React, { FC, useState } from "react";
-import { ISelectFieldOption } from "../../../utils/interfaces";
+import React, { FC } from "react";
+import { TSelectFieldOption } from "../../../utils/types";
 
 interface IProps {
   show: boolean;
-  options: ISelectFieldOption[];
-  onClick: (option: ISelectFieldOption) => void;
+  options: TSelectFieldOption[];
+  onClick: (option: TSelectFieldOption) => void;
   isLoading: boolean;
   error: string;
   onSearchChange: (search: string) => void;
-  selectedOption: ISelectFieldOption;
+  selectedOption: TSelectFieldOption;
 }
 
 export const SelectFieldOptions: FC<IProps> = ({
@@ -29,18 +29,20 @@ export const SelectFieldOptions: FC<IProps> = ({
 
     return options.map((option) => {
       let className = "option";
-      if (option.id === selectedOption.id) {
+
+      if (option.name === selectedOption.name) {
         className += " active";
       }
+
       return (
         <li
-          key={option.id}
+          key={option.name}
           className={className}
           onClick={() => {
             onClick(option);
           }}
         >
-          {option.name}
+          {option.name || "All"}
         </li>
       );
     });
